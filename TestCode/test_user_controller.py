@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock
 from Control import user_controller
 import selenium.common.exceptions as se
 
@@ -19,9 +20,10 @@ class test_user_controller(unittest.TestCase):
         
     def test_get_location(self):
         try:
-            address = user_controller.get_location()
-            print("address: "+address)
-            self.assertRegex(address, "([A-Za-z0-9\s,]+\s[0-9A-Za-z]+)+", msg="Invalid Address!")
+            with mock.patch("Control.user_controller.get_coordinates", return_value = (23.75080, 90.42195)):
+                address = user_controller.get_location()
+                print("address: "+address)
+                self.assertRegex(address, "([A-Za-z0-9\s,]+\s[0-9A-Za-z]+)+", msg="Invalid Address!")
         except:
             self.fail(msg="Error: Check internet connection or access to Nominatim api services")
 
